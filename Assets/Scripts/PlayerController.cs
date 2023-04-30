@@ -11,12 +11,14 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;
     bool isJumping;
     bool facingRight = true;
+    Animator animator;
+
 
     // Start is called before the first frame update
     void Start()
     {
         rb2D = gameObject.GetComponent<Rigidbody2D>();
-
+        animator = gameObject.GetComponent<Animator>();
         isJumping = false;
         
         
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveVertical = Input.GetAxisRaw("Vertical");
+        
         
         if (moveHorizontal > 0 && !facingRight)
         {
@@ -41,6 +44,7 @@ public class PlayerController : MonoBehaviour
     
     void FixedUpdate()
     {
+        animator.SetFloat("speed", Mathf.Abs(moveHorizontal));
         if (moveHorizontal > 0.1f || moveHorizontal < -0.1f)
         {
             rb2D.AddForce(new Vector2(moveHorizontal * moveSpeed, 0f), ForceMode2D.Impulse );
