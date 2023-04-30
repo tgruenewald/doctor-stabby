@@ -9,8 +9,6 @@ public class basicZombie : MonoBehaviour
     public float speed;
     public float distance;
     public bool isRight;
-    public bool follow;
-    public int clock;
     public float holdXb;
     public float holdXf;
     Rigidbody2D mrig;
