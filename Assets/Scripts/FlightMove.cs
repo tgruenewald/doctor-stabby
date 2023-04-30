@@ -45,12 +45,16 @@ public class FlightMove : MonoBehaviour
             {
                 speedx = 0.0f;
             }
-            if (Player.GetComponent<Transform>().position.x < mtrans.position.x)
+
+            if (Player.GetComponent<Transform>().position.y < mtrans.position.y)
+
             {
                 speedy = -speed;
 
             }
-            else if (Player.GetComponent<Transform>().position.x > mtrans.position.x)
+
+            else if (Player.GetComponent<Transform>().position.y > mtrans.position.y)
+
             {
                 speedy = speed;
 
