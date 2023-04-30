@@ -27,7 +27,7 @@ public class FlightMove : MonoBehaviour
     void Update()
     {
         vel = new Vector2(speedx, speedy);
-        distToPlayer = Mathf.Sqrt((Player.GetComponent<Transform>().position.x - mtrans.position.x) * (Player.GetComponent<Transform>().position.x - mtrans.position.x) + (Player.GetComponent<Transform>().position.y - mtrans.position.y) * (Player.GetComponent<Transform>().position.y - mtrans.position.y));
+        distToPlayer = Mathf.Sqrt((Player.GetComponent<Transform>().position.x - mtrans.position.x) * (Player.GetComponent<Transform>().position.x - mtrans.position.x) + ((Player.GetComponent<Transform>().position.y - mtrans.position.y) * (Player.GetComponent<Transform>().position.y - mtrans.position.y)));
         if (distToPlayer <= area) 
         {
             mrig.MovePosition(mrig.position + (1.0f * vel * Time.deltaTime));
@@ -70,5 +70,19 @@ public class FlightMove : MonoBehaviour
             speedy = 0.0f;
         }
 
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("hit");
+            collision.gameObject.GetComponent<PlayerController>().health -= 1;
+            SetSpeed();
+            Invoke("SetSpeed", 2f);
+        }
+    }
+    void SetSpeed()
+    {
+        speed = -speed;
     }
 }

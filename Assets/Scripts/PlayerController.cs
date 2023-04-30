@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;
     bool isJumping;
     bool facingRight = true;
+    public int health = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +50,10 @@ public class PlayerController : MonoBehaviour
         if (!isJumping && moveVertical > 0.1f)
         {
             rb2D.AddForce(new Vector2(0f, moveVertical * jumpForce), ForceMode2D.Impulse);
+        }
+        if(health == 0)
+        {
+            GameObject.Destroy(gameObject);
         }
     }
 
