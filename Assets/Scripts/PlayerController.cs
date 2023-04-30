@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     
     void FixedUpdate()
     {
-        //animator.SetFloat("speed", Mathf.Abs(moveHorizontal));
+        animator.SetFloat("speed", Mathf.Abs(moveHorizontal));
         if (moveHorizontal > 0.1f || moveHorizontal < -0.1f)
         {
             rb2D.AddForce(new Vector2(moveHorizontal * moveSpeed, 0f), ForceMode2D.Impulse );
