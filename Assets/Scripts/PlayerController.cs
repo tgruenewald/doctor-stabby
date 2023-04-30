@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 3f;
     public float jumpForce = 10f;
     bool isJumping;
+    bool facingRight = true;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,15 @@ public class PlayerController : MonoBehaviour
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveVertical = Input.GetAxisRaw("Vertical");
+        
+        if (moveHorizontal > 0 && !facingRight)
+        {
+            Flip();
+        }
+        else if (moveHorizontal < 0 && facingRight)
+        {
+            Flip();
+        }
     }
 
     
@@ -60,5 +70,13 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = true;
         }
+    }
+
+    void Flip()
+    {
+        facingRight = !facingRight;
+        Vector2 currentScale = transform.localScale;
+        currentScale.x *= -1;
+        transform.localScale = currentScale;
     }
 }
