@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     bool facingRight = true;
     Animator animator;
 
+    public int health = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +54,10 @@ public class PlayerController : MonoBehaviour
         if (!isJumping && moveVertical > 0.1f)
         {
             rb2D.AddForce(new Vector2(0f, moveVertical * jumpForce), ForceMode2D.Impulse);
+        }
+        if(health == 0)
+        {
+            GameObject.Destroy(gameObject);
         }
     }
 
