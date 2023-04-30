@@ -5,7 +5,7 @@ using UnityEngine;
 public class basicZombie : MonoBehaviour
 {
     public float distToPlayer;
-    public GameObject Player;
+    public GameObject player;
     public float speed;
     public float distance;
     public bool isRight;
@@ -23,7 +23,7 @@ public class basicZombie : MonoBehaviour
         mrig = GetComponent<Rigidbody2D>();
         mtrans = GetComponent<Transform>();
         vel = new Vector2(speed, 0.0f);
-        Player = GameObject.FindGameObjectsWithTag("Player")[0];
+        player = GameObject.FindGameObjectsWithTag("Player")[0];
         holdXb = mtrans.position.x - distance;
         holdXf = mtrans.position.x + distance;
     }
@@ -31,7 +31,16 @@ public class basicZombie : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        distToPlayer = Mathf.Sqrt((Player.GetComponent<Transform>().position.x - mtrans.position.x) * (Player.GetComponent<Transform>().position.x - mtrans.position.x) + (Player.GetComponent<Transform>().position.y - mtrans.position.y) * (Player.GetComponent<Transform>().position.y - mtrans.position.y));
+
+        if (player != null)
+        {
+            distToPlayer = Mathf.Sqrt(
+                (player.GetComponent<Transform>().position.x - mtrans.position.x) 
+                * (player.GetComponent<Transform>().position.x - mtrans.position.x) 
+                + (player.GetComponent<Transform>().position.y - mtrans.position.y) 
+                * (player.GetComponent<Transform>().position.y - mtrans.position.y));
+        }
+
         if (isRight && mtrans.position.x < holdXf)
         {
             mrig.MovePosition(mrig.position + (1.0f * vel * Time.deltaTime));
@@ -54,12 +63,12 @@ public class basicZombie : MonoBehaviour
         {
   
             tracking = true;
-            if (Player.GetComponent<Transform>().position.x < mtrans.position.x)
+            if (player != null && player.GetComponent<Transform>().position.x < mtrans.position.x)
             {
                 isRight = false;
                 
             }
-            if (Player.GetComponent<Transform>().position.x > mtrans.position.x)
+            if (player != null && player.GetComponent<Transform>().position.x > mtrans.position.x)
             {
                 isRight = true;
                 
@@ -76,7 +85,11 @@ public class basicZombie : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("hit");
-            collision.gameObject.GetComponent<PlayerController>().health -= 1;
+            PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
+            if(playerController != null)
+            {
+                playerController.health -= 1;
+            }
             SetSpeed();
             Invoke("SetSpeed", 2f);
         }
