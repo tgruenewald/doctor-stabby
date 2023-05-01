@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     bool facingRight = true;
     Animator animator;
     bool hit = false;
+    bool fight_front = false;
     public int health = 10000;
 
     // Start is called before the first frame update
@@ -29,9 +30,31 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal");
-        moveVertical = Input.GetAxisRaw("Vertical");
+        moveVertical = Input.GetAxisRaw("Jump");
         
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            print("fight!");
+            fight_front = true;
+        }
+
+        if (Input.GetMouseButtonUp(0))  
+        {
+            print("weapon back");
+            fight_front= false; 
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.W)) 
+        {
+            animator.SetBool("fight_up", true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.W))
+        {
+            animator.SetBool("fight_up", false);
+        }
+
         if (moveHorizontal > 0 && !facingRight)
         {
             Flip();
@@ -45,6 +68,14 @@ public class PlayerController : MonoBehaviour
     
     void FixedUpdate()
     {
+        if (fight_front)
+        {
+            animator.SetBool("fight_front", true);
+        }
+        else
+        {
+            animator.SetBool("fight_front", false);
+        }
         animator.SetFloat("speed", Mathf.Abs(moveHorizontal));
         if (moveHorizontal > 0.1f || moveHorizontal < -0.1f)
         {
@@ -106,10 +137,10 @@ public class PlayerController : MonoBehaviour
 
     void beingHit()
     {
+        print("i got hit");
         if (hit != true)
         {
             health -= 1;
-            print("Health: " + health);
             hit = true;
             animator.SetBool("hit", true);
             StartCoroutine(TimerCoroutine());
@@ -118,6 +149,7 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator TimerCoroutine()
     {
+        print("Starting timer");
         yield return new WaitForSeconds(0.5f); 
         animator.SetBool("hit", false);
         hit = false;
