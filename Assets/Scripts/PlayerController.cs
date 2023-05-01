@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveVertical = Input.GetAxisRaw("Vertical");
         
-        
+
         if (moveHorizontal > 0 && !facingRight)
         {
             Flip();
@@ -98,10 +98,10 @@ public class PlayerController : MonoBehaviour
 
     void beingHit()
     {
+        print("i got hit");
         if (hit != true)
         {
             health -= 1;
-            print("Health: " + health);
             hit = true;
             animator.SetBool("hit", true);
             StartCoroutine(TimerCoroutine());
@@ -110,6 +110,7 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator TimerCoroutine()
     {
+        print("Starting timer");
         yield return new WaitForSeconds(0.5f); 
         animator.SetBool("hit", false);
         hit = false;
