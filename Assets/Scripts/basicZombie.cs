@@ -27,7 +27,7 @@ public class basicZombie : MonoBehaviour
         mrig = GetComponent<Rigidbody2D>();
         mtrans = GetComponent<Transform>();
         vel = new Vector2(speed, 0.0f);
-        player = GameObject.FindGameObjectsWithTag("Player")[0];
+        player = GameObject.FindGameObjectWithTag("Player");
         holdXb = mtrans.position.x - distance;
         holdXf = mtrans.position.x + distance;
     }
@@ -105,6 +105,7 @@ public class basicZombie : MonoBehaviour
             print("knockback: " + direction);
             mrig.AddForce(new Vector2(direction * knockBackForce, 0f), ForceMode2D.Impulse);
             knockBackMode = true;
+            GetComponent<AudioSource>().Play();
             StartCoroutine(TimerCoroutine());
             //SetSpeed();
             // Invoke("SetSpeed", 2f);
@@ -114,6 +115,7 @@ public class basicZombie : MonoBehaviour
 
     IEnumerator TimerCoroutine()
     {
+        
         yield return new WaitForSeconds(0.5f);
         knockBackMode = false;
     }
