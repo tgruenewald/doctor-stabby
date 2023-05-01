@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-        void Flip()
+    void Flip()
     {
         facingRight = !facingRight;
         Vector2 currentScale = transform.localScale;
