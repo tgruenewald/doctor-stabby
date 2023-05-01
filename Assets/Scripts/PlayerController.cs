@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject painBox;
+    public float leftOffset;
+    public float rightOffset;
+    public float upOffset;
+    public float downOffet;
+
+
     Rigidbody2D rb2D;
     float moveHorizontal;
     float moveVertical;
@@ -15,6 +22,14 @@ public class PlayerController : MonoBehaviour
     bool hit = false;
     bool fight_front = false;
     public int health = 10000;
+
+    private enum FacingDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +63,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W)) 
         {
             animator.SetBool("fight_up", true);
+            FacingDirection facingDirection = FacingDirection.Up;
+            Attack(facingDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.W))
@@ -57,6 +74,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             animator.SetBool("fight_down", true);
+            FacingDirection facingDirection = FacingDirection.Down;
+            Attack(facingDirection);
         }
 
         if (Input.GetKeyUp(KeyCode.S))
@@ -81,6 +100,19 @@ public class PlayerController : MonoBehaviour
         if (fight_front)
         {
             animator.SetBool("fight_front", true);
+            FacingDirection facingDirection;
+            if (transform.localScale.x > 0)
+            {
+                print("attacking right");
+                facingDirection = FacingDirection.Right;
+            } 
+            else
+            {
+                print("attacking left");
+                facingDirection= FacingDirection.Left;
+
+            }
+            Attack(facingDirection);
         }
         else
         {
@@ -163,6 +195,38 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.5f); 
         animator.SetBool("hit", false);
         hit = false;
+    }
+
+    void Attack(FacingDirection cd)
+    {
+        //creates an object near player location that's hit box will hurt zombies
+        //direction of object depends on facing direction
+        Debug.Log(cd);
+        //if space is pushed
+        //spawn pain box in current direction
+        float playerX = transform.position.x;
+        float playerY = transform.position.y;
+        switch (cd)
+        {
+            case FacingDirection.Up:
+                Debug.Log("got into up, player box should go to " + playerX + " " + transform.position.y + upOffset);
+                Quaternion quat = new Quaternion(0, 0, 0, 0);
+                Instantiate(painBox, new Vector3(playerX, transform.position.y + upOffset, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
+                break;
+            case FacingDirection.Down:
+                Debug.Log("got into down, player box should go to " + playerX + " " + transform.position.y + downOffet);
+                Instantiate(painBox, new Vector3(playerX, transform.position.y - downOffet, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
+                break;
+            case FacingDirection.Left:
+                Debug.Log("got into left, player box should go to " + transform.position.x + leftOffset + " " + playerY);
+                Instantiate(painBox, new Vector3(transform.position.x - leftOffset, playerY + 5f, 0), Quaternion.identity);
+                break;
+            case FacingDirection.Right:
+                print("Up offset is " + upOffset);
+                Instantiate(painBox, new Vector3(transform.position.x + rightOffset, transform.position.y + 5f, 0), Quaternion.identity);
+
+                break;
+        }
     }
 
 }

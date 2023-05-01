@@ -27,7 +27,7 @@ public class attack : MonoBehaviour
     FacingDirection cd = FacingDirection.Up;
     void Update()
     {
-     
+        
         //update the current direction var
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -78,8 +78,8 @@ public class attack : MonoBehaviour
             Instantiate(painBox, new Vector3(transform.position.x + leftOffset, playerY, 0), Quaternion.identity);
             break;
         case FacingDirection.Right:
-            print("Up offset is " + upOffset);
-            Instantiate(painBox, new Vector3(transform.position.x + rightOffset, (transform.position.y + upOffset), 0), Quaternion.identity);
+            Debug.Log("got into right, player box should go to " + transform.position.x + rightOffset + " " + playerY);
+            Instantiate(painBox, new Vector3(transform.position.x + rightOffset, playerY, 0), Quaternion.identity);
             
             break;
         }
