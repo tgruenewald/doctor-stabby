@@ -12,8 +12,8 @@ public class PlayerController : MonoBehaviour
     bool isJumping;
     bool facingRight = true;
     Animator animator;
-
-    public int health = 10;
+    bool hit = false;
+    public int health = 10000;
 
     // Start is called before the first frame update
     void Start()
@@ -80,12 +80,39 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Zombie")
+        {
+            beingHit();
+        }
+    }
 
-    void Flip()
+        void Flip()
     {
         facingRight = !facingRight;
         Vector2 currentScale = transform.localScale;
         currentScale.x *= -1;
         transform.localScale = currentScale;
     }
+
+    void beingHit()
+    {
+        if (hit != true)
+        {
+            health -= 1;
+            print("Health: " + health);
+            hit = true;
+            animator.SetBool("hit", true);
+            StartCoroutine(TimerCoroutine());
+        }
+
+    }
+    IEnumerator TimerCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f); 
+        animator.SetBool("hit", false);
+        hit = false;
+    }
+
 }

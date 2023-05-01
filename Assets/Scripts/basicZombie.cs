@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class basicZombie : MonoBehaviour
@@ -16,6 +17,8 @@ public class basicZombie : MonoBehaviour
     Vector2 vel;
     public bool tracking = false;
     public float area;
+    float knockBackForce = 30f;
+    bool knockBackMode = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,55 +31,57 @@ public class basicZombie : MonoBehaviour
         holdXf = mtrans.position.x + distance;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    void FixedUpdate()
     {
-
-        if (player != null)
+        if (!knockBackMode) 
         {
-            distToPlayer = Mathf.Sqrt(
-                (player.GetComponent<Transform>().position.x - mtrans.position.x) 
-                * (player.GetComponent<Transform>().position.x - mtrans.position.x) 
-                + (player.GetComponent<Transform>().position.y - mtrans.position.y) 
-                * (player.GetComponent<Transform>().position.y - mtrans.position.y));
-        }
-
-        if (isRight && mtrans.position.x < holdXf)
-        {
-            mrig.MovePosition(mrig.position + (1.0f * vel * Time.deltaTime));
-            Debug.Log("right");
-        }
-        if(mtrans.position.x <= holdXb && !tracking)
-        {
-            isRight = true;
-        }
-        if (mtrans.position.x >= holdXf && !tracking)
-        {
-            isRight = false;
-        }
-        if (!isRight && mtrans.position.x > holdXb)
-        {
-            mrig.MovePosition(mrig.position - (1.0f * vel * Time.deltaTime));
-            Debug.Log("left");
-        }
-        if(distToPlayer <= area)
-        {
-  
-            tracking = true;
-            if (player != null && player.GetComponent<Transform>().position.x < mtrans.position.x)
+            if (player != null)
             {
-                isRight = false;
-                
+                distToPlayer = Mathf.Sqrt(
+                    (player.GetComponent<Transform>().position.x - mtrans.position.x)
+                    * (player.GetComponent<Transform>().position.x - mtrans.position.x)
+                    + (player.GetComponent<Transform>().position.y - mtrans.position.y)
+                    * (player.GetComponent<Transform>().position.y - mtrans.position.y));
             }
-            if (player != null && player.GetComponent<Transform>().position.x > mtrans.position.x)
+
+            if (isRight && mtrans.position.x < holdXf)
+            {
+                mrig.MovePosition(mrig.position + (1.0f * vel * Time.deltaTime));
+                Debug.Log("right");
+            }
+            if (mtrans.position.x <= holdXb && !tracking)
             {
                 isRight = true;
-                
             }
-        }
-        else
-        {
-            tracking = false;
+            if (mtrans.position.x >= holdXf && !tracking)
+            {
+                isRight = false;
+            }
+            if (!isRight && mtrans.position.x > holdXb)
+            {
+                mrig.MovePosition(mrig.position - (1.0f * vel * Time.deltaTime));
+                Debug.Log("left");
+            }
+            if (distToPlayer <= area)
+            {
+
+                tracking = true;
+                if (player != null && player.GetComponent<Transform>().position.x < mtrans.position.x)
+                {
+                    isRight = false;
+
+                }
+                if (player != null && player.GetComponent<Transform>().position.x > mtrans.position.x)
+                {
+                    isRight = true;
+
+                }
+            }
+            else
+            {
+                tracking = false;
+            }
         }
 
     }
@@ -88,11 +93,28 @@ public class basicZombie : MonoBehaviour
             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
             if(playerController != null)
             {
-                playerController.health -= 1;
+                // playerController.health -= 1;
             }
-            SetSpeed();
-            Invoke("SetSpeed", 2f);
+            
+            float direction = 1f;
+            if (isRight)
+            {
+                direction = -1f;
+            }
+            print("knockback: " + direction);
+            mrig.AddForce(new Vector2(direction * knockBackForce, 0f), ForceMode2D.Impulse);
+            knockBackMode = true;
+            StartCoroutine(TimerCoroutine());
+            //SetSpeed();
+            // Invoke("SetSpeed", 2f);
+
         }
+    }
+
+    IEnumerator TimerCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        knockBackMode = false;
     }
     void SetSpeed()
     {
