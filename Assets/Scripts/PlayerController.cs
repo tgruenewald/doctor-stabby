@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     bool hit = false;
     bool fight_front = false;
     public int health = 10000;
+    bool bang = false;
 
     private enum FacingDirection
     {
@@ -197,35 +198,46 @@ public class PlayerController : MonoBehaviour
         hit = false;
     }
 
+    IEnumerator PainCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        bang = false;
+    }
+
+
     void Attack(FacingDirection cd)
     {
         //creates an object near player location that's hit box will hurt zombies
         //direction of object depends on facing direction
-        Debug.Log(cd);
-        //if space is pushed
-        //spawn pain box in current direction
-        float playerX = transform.position.x;
-        float playerY = transform.position.y;
-        switch (cd)
+        if (!bang)
         {
-            case FacingDirection.Up:
-                Debug.Log("got into up, player box should go to " + playerX + " " + transform.position.y + upOffset);
-                Quaternion quat = new Quaternion(0, 0, 0, 0);
-                Instantiate(painBox, new Vector3(playerX, transform.position.y + upOffset, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
-                break;
-            case FacingDirection.Down:
-                Debug.Log("got into down, player box should go to " + playerX + " " + transform.position.y + downOffet);
-                Instantiate(painBox, new Vector3(playerX, transform.position.y - downOffet, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
-                break;
-            case FacingDirection.Left:
-                Debug.Log("got into left, player box should go to " + transform.position.x + leftOffset + " " + playerY);
-                Instantiate(painBox, new Vector3(transform.position.x - leftOffset, playerY + 5f, 0), Quaternion.identity);
-                break;
-            case FacingDirection.Right:
-                print("Up offset is " + upOffset);
-                Instantiate(painBox, new Vector3(transform.position.x + rightOffset, transform.position.y + 5f, 0), Quaternion.identity);
+            bang = true;
+            StartCoroutine(PainCoroutine());    
+            //if space is pushed
+            //spawn pain box in current direction
+            float playerX = transform.position.x;
+            float playerY = transform.position.y;
+            switch (cd)
+            {
+                case FacingDirection.Up:
+                    Debug.Log("got into up, player box should go to " + playerX + " " + transform.position.y + upOffset);
+                    Quaternion quat = new Quaternion(0, 0, 0, 0);
+                    Instantiate(painBox, new Vector3(playerX, transform.position.y + upOffset, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
+                    break;
+                case FacingDirection.Down:
+                    Debug.Log("got into down, player box should go to " + playerX + " " + transform.position.y + downOffet);
+                    Instantiate(painBox, new Vector3(playerX, transform.position.y - downOffet, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
+                    break;
+                case FacingDirection.Left:
+                    Debug.Log("got into left, player box should go to " + transform.position.x + leftOffset + " " + playerY);
+                    Instantiate(painBox, new Vector3(transform.position.x - leftOffset, playerY + 5f, 0), Quaternion.identity);
+                    break;
+                case FacingDirection.Right:
+                    print("Up offset is " + upOffset);
+                    Instantiate(painBox, new Vector3(transform.position.x + rightOffset, transform.position.y + 5f, 0), Quaternion.identity);
 
-                break;
+                    break;
+            }
         }
     }
 

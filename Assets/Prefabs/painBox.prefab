@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4946542700444452716}
   m_Layer: 0
   m_Name: painBox
-  m_TagString: Untagged
+  m_TagString: PainBox
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8010769236907398604
 MeshFilter:
@@ -142,4 +142,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44623b07a0524049a5234be1fb1660e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToDestruction: 2
+  timeToDestruction: 0.5
