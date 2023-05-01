@@ -15,5 +15,7 @@ public class SceneButton : MonoBehaviour
     public void creditsButton(){
         SceneManager.LoadScene("Credits");
     }
-
+    public void playAgain(){
+        SceneManager.LoadScene("title_scene");
+    }
 }

@@ -36,7 +36,7 @@ public class basicZombie : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         holdXb = mtrans.position.x - distance;
         holdXf = mtrans.position.x + distance;
-        scoreText.text = "Score: " + score.ToString();
+        scoreText.text = score.ToString();
     }
 
 

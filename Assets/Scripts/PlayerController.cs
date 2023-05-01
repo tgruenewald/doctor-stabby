@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -185,8 +186,11 @@ public class PlayerController : MonoBehaviour
         print("i got hit");
         if (hit != true)
         {
-            health -= 1;
+            health -= 10;
             livesText.text = health.ToString();
+            if(health < 1){
+                SceneManager.LoadScene("GameOver");
+            }
             hit = true;
             animator.SetBool("hit", true);
             StartCoroutine(TimerCoroutine());
