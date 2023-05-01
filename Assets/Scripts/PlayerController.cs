@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("speed", Mathf.Abs(moveHorizontal));
         if (moveHorizontal > 0.1f || moveHorizontal < -0.1f)
         {
-            StartCoroutine(SoundCoroutine());
+            //StartCoroutine(SoundCoroutine());
             
             rb2D.AddForce(new Vector2(moveHorizontal * moveSpeed, 0f), ForceMode2D.Impulse );
             
