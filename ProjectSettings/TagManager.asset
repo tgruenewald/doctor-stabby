@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Platform
   - Zombie
+  - PainBox
   layers:
   - Default
   - TransparentFX

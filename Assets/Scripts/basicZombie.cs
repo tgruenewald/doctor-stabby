@@ -19,7 +19,7 @@ public class basicZombie : MonoBehaviour
     public float area;
     float knockBackForce = 30f;
     bool knockBackMode = false;
-    public int health = 1;
+    public int health = 10;
     private bool facingRight = false;
 
     // Start is called before the first frame update
@@ -99,11 +99,17 @@ public class basicZombie : MonoBehaviour
         {
             GameObject.Destroy(gameObject);
         }
-        if(health <= 0)
-        {
-            GameObject.Destroy(gameObject);
-        }
 
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("PainBox"))
+        {
+            print("ouch");
+            Destroy(collision.gameObject);
+            health -= 1;
+
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
