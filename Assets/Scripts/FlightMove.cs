@@ -13,6 +13,7 @@ public class FlightMove : MonoBehaviour
     Transform mtrans;
     Vector2 vel;
     public float area;
+    public int health;
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +69,10 @@ public class FlightMove : MonoBehaviour
         {
             speedx = 0.0f;
             speedy = 0.0f;
+        }
+        if (health <= 0)
+        {
+            GameObject.Destroy(gameObject);
         }
 
     }

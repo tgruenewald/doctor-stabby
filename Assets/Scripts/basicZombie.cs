@@ -16,6 +16,7 @@ public class basicZombie : MonoBehaviour
     Vector2 vel;
     public bool tracking = false;
     public float area;
+    public int health;
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +69,10 @@ public class basicZombie : MonoBehaviour
         else
         {
             tracking = false;
+        }
+        if(health <= 0)
+        {
+            GameObject.Destroy(gameObject);
         }
 
     }
