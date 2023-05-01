@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneButton : MonoBehaviour
 {
     public Scene nextLevel;
+    public int levelIndex;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,6 @@ public class SceneButton : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        SceneManager.LoadScene(nextLevel.buildIndex);
+        SceneManager.LoadScene(levelIndex);
     }
 }
