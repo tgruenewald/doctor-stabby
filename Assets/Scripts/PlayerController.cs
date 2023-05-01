@@ -45,6 +45,16 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        if (Input.GetKeyDown(KeyCode.W)) 
+        {
+            animator.SetBool("fight_up", true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.W))
+        {
+            animator.SetBool("fight_up", false);
+        }
+
         if (moveHorizontal > 0 && !facingRight)
         {
             Flip();
