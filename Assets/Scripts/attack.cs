@@ -5,10 +5,10 @@ using UnityEngine;
 public class attack : MonoBehaviour
 {
     public GameObject painBox;
-    public float leftOffset = 0;
-    public float rightOffset = 0;
-    public float upOffset = 0;
-    public float downOffet = 0;
+    public float leftOffset;
+    public float rightOffset;
+    public float upOffset;
+    public float downOffet;
     private enum FacingDirection 
     {
     Up,
@@ -24,9 +24,10 @@ public class attack : MonoBehaviour
     }
 
     // Update is called once per frame
+    FacingDirection cd = FacingDirection.Up;
     void Update()
     {
-        FacingDirection cd = FacingDirection.Up;
+        
         //update the current direction var
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -56,7 +57,7 @@ public class attack : MonoBehaviour
     void Attack(FacingDirection cd){
         //creates an object near player location that's hit box will hurt zombies
         //direction of object depends on facing direction
-
+        Debug.Log(cd);
         //if space is pushed
         //spawn pain box in current direction
         float playerX = transform.position.x;
@@ -64,20 +65,26 @@ public class attack : MonoBehaviour
         switch(cd) 
         {
         case FacingDirection.Up:
-            Instantiate(painBox, new Vector3(playerX, transform.position.y + upOffset, 0), Quaternion.identity);
+            Debug.Log("got into up, player box should go to " + playerX + " " + transform.position.y + upOffset);
+            Quaternion quat = new Quaternion(0,0 ,0, 0);
+            Instantiate(painBox, new Vector3(playerX, transform.position.y + upOffset, 0),  Quaternion.Euler(new Vector3(0, 0, 90)));
             break;
         case FacingDirection.Down:
-            Instantiate(painBox, new Vector3(playerX, transform.position.y + downOffet, 0), Quaternion.identity);
+            Debug.Log("got into down, player box should go to " + playerX + " " + transform.position.y + downOffet);
+            Instantiate(painBox, new Vector3(playerX, transform.position.y + downOffet, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
             break;
         case FacingDirection.Left:
+            Debug.Log("got into left, player box should go to " + transform.position.x + leftOffset + " " + playerY);
             Instantiate(painBox, new Vector3(transform.position.x + leftOffset, playerY, 0), Quaternion.identity);
             break;
         case FacingDirection.Right:
+            Debug.Log("got into right, player box should go to " + transform.position.x + rightOffset + " " + playerY);
             Instantiate(painBox, new Vector3(transform.position.x + rightOffset, playerY, 0), Quaternion.identity);
+            
             break;
         }
     }
     void destroyPainBox(){
-
+        //destroy box when not using it
     }
 }
