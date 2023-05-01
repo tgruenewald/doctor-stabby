@@ -5,13 +5,14 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public float timer;
+    public float initTimer;
     public GameObject target;
     
     // Start is called before the first frame update
     void Start()
     {
 
-        InvokeRepeating( "Summon", 5.0f, timer);
+        InvokeRepeating( "Summon", initTimer, timer);
     }
 
     // Update is called once per frame
