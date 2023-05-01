@@ -340,6 +340,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &315894098 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6187485839878007627, guid: 99c873aeda387f749b3835a4f40a17fa, type: 3}
+  m_PrefabInstance: {fileID: 1150645249}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &887376913 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3043522570305378690, guid: 35e26f0501eb75e498c1087c6603e9f6, type: 3}
@@ -597,6 +608,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4566508408766109254, guid: 99c873aeda387f749b3835a4f40a17fa, type: 3}
+      propertyPath: m_Text
+      value: 'CURES DELIVERED:
+
+        HEALTH:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6169030520578457506, guid: 99c873aeda387f749b3835a4f40a17fa, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 15.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6857639854775097707, guid: 99c873aeda387f749b3835a4f40a17fa, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -758,6 +779,10 @@ PrefabInstance:
       propertyPath: jumpForce
       value: 80
       objectReference: {fileID: 0}
+    - target: {fileID: 4499081440284514771, guid: 35e26f0501eb75e498c1087c6603e9f6, type: 3}
+      propertyPath: livesText
+      value: 
+      objectReference: {fileID: 315894098}
     - target: {fileID: 4704205183866114954, guid: 35e26f0501eb75e498c1087c6603e9f6, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.55696493
