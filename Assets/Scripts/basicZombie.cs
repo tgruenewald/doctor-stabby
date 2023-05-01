@@ -19,7 +19,7 @@ public class basicZombie : MonoBehaviour
     public float area;
     float knockBackForce = 30f;
     bool knockBackMode = false;
-    public int health;
+    public int health = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -83,6 +83,10 @@ public class basicZombie : MonoBehaviour
             {
                 tracking = false;
             }
+        }
+        if(health <= 0)
+        {
+            GameObject.Destroy(gameObject);
         }
 
     }
