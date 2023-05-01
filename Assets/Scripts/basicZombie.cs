@@ -20,6 +20,7 @@ public class basicZombie : MonoBehaviour
     float knockBackForce = 30f;
     bool knockBackMode = false;
     public int health;
+    private bool facingRight = false;
 
     // Start is called before the first frame update
     void Start()
@@ -83,6 +84,16 @@ public class basicZombie : MonoBehaviour
             {
                 tracking = false;
             }
+
+            if (isRight && !facingRight)
+            {
+                Flip();
+            }
+            if (!isRight && facingRight)
+            {
+                Flip();
+            }
+
         }
 
     }
@@ -105,7 +116,8 @@ public class basicZombie : MonoBehaviour
             print("knockback: " + direction);
             mrig.AddForce(new Vector2(direction * knockBackForce, 0f), ForceMode2D.Impulse);
             knockBackMode = true;
-            GetComponent<AudioSource>().Play();
+            // TODO: add back in
+            //GetComponent<AudioSource>().Play();
             StartCoroutine(TimerCoroutine());
             //SetSpeed();
             // Invoke("SetSpeed", 2f);
@@ -122,5 +134,13 @@ public class basicZombie : MonoBehaviour
     void SetSpeed()
     {
         speed = -speed;
+    }
+    void Flip()
+    {
+        print("flip");
+        facingRight = !facingRight;
+        Vector2 currentScale = transform.localScale;
+        currentScale.x *= -1;
+        transform.localScale = currentScale;
     }
 }
