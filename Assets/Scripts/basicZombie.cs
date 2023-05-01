@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class basicZombie : MonoBehaviour
 {
@@ -19,8 +20,12 @@ public class basicZombie : MonoBehaviour
     public float area;
     float knockBackForce = 30f;
     bool knockBackMode = false;
-    public int health = 1;
+    public int health = 10;
     private bool facingRight = false;
+    [Header("Default Score")]
+    public int score = 0;
+    [Header("Text Object for Displaying Score")]
+    public Text scoreText;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +36,7 @@ public class basicZombie : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         holdXb = mtrans.position.x - distance;
         holdXf = mtrans.position.x + distance;
+        scoreText.text = "Score: " + score.ToString();
     }
 
 
@@ -97,13 +103,20 @@ public class basicZombie : MonoBehaviour
         }
         if(health <= 0)
         {
-            GameObject.Destroy(gameObject);
-        }
-        if(health <= 0)
-        {
+            AddScore(5);
             GameObject.Destroy(gameObject);
         }
 
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("PainBox"))
+        {
+            print("ouch");
+            Destroy(collision.gameObject);
+            health -= 1;
+
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -150,5 +163,10 @@ public class basicZombie : MonoBehaviour
         Vector2 currentScale = transform.localScale;
         currentScale.x *= -1;
         transform.localScale = currentScale;
+    }
+    public void AddScore(int points)
+    {
+        score = score + points;
+        scoreText.text = score.ToString();
     }
 }

@@ -5,21 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneButton : MonoBehaviour
 {
-    public Scene nextLevel;
-    public int levelIndex;
+    //public Scene nextLevel;
     // Start is called before the first frame update
-    void Start()
+
+    public void playButton()
     {
-        
+        SceneManager.LoadScene("MainScene");
+    }
+    public void creditsButton(){
+        SceneManager.LoadScene("Credits");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    private void OnMouseDown()
-    {
-        SceneManager.LoadScene(levelIndex);
-    }
 }
