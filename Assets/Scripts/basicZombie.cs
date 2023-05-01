@@ -19,6 +19,8 @@ public class basicZombie : MonoBehaviour
     public float area;
     float knockBackForce = 30f;
     bool knockBackMode = false;
+    public int health = 1;
+    private bool facingRight = false;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +28,7 @@ public class basicZombie : MonoBehaviour
         mrig = GetComponent<Rigidbody2D>();
         mtrans = GetComponent<Transform>();
         vel = new Vector2(speed, 0.0f);
-        player = GameObject.FindGameObjectsWithTag("Player")[0];
+        player = GameObject.FindGameObjectWithTag("Player");
         holdXb = mtrans.position.x - distance;
         holdXf = mtrans.position.x + distance;
     }
@@ -82,6 +84,24 @@ public class basicZombie : MonoBehaviour
             {
                 tracking = false;
             }
+
+            if (isRight && !facingRight)
+            {
+                Flip();
+            }
+            if (!isRight && facingRight)
+            {
+                Flip();
+            }
+
+        }
+        if(health <= 0)
+        {
+            GameObject.Destroy(gameObject);
+        }
+        if(health <= 0)
+        {
+            GameObject.Destroy(gameObject);
         }
 
     }
@@ -104,6 +124,8 @@ public class basicZombie : MonoBehaviour
             print("knockback: " + direction);
             mrig.AddForce(new Vector2(direction * knockBackForce, 0f), ForceMode2D.Impulse);
             knockBackMode = true;
+            // TODO: add back in
+            //GetComponent<AudioSource>().Play();
             StartCoroutine(TimerCoroutine());
             //SetSpeed();
             // Invoke("SetSpeed", 2f);
@@ -113,11 +135,20 @@ public class basicZombie : MonoBehaviour
 
     IEnumerator TimerCoroutine()
     {
+        
         yield return new WaitForSeconds(0.5f);
         knockBackMode = false;
     }
     void SetSpeed()
     {
         speed = -speed;
+    }
+    void Flip()
+    {
+        print("flip");
+        facingRight = !facingRight;
+        Vector2 currentScale = transform.localScale;
+        currentScale.x *= -1;
+        transform.localScale = currentScale;
     }
 }
