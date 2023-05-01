@@ -7,12 +7,20 @@ public class Spawner : MonoBehaviour
     public float timer;
     public float initTimer;
     public GameObject target;
+    public bool difficulty = false;
     
     // Start is called before the first frame update
     void Start()
     {
-
-        InvokeRepeating( "Summon", initTimer, timer);
+        if(difficulty == false)
+        {
+            InvokeRepeating("Summon", initTimer, timer);
+        }
+        else
+        {
+            InvokeRepeating("Summon", initTimer, (timer/(Time.time + 1)));
+        }
+        
     }
 
     // Update is called once per frame

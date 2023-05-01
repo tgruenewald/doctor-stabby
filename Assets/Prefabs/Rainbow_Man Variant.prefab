@@ -170,3 +170,4 @@ MonoBehaviour:
   holdXf: 0
   tracking: 0
   area: 100
+  health: 1

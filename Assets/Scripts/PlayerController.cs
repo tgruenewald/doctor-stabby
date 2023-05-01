@@ -54,6 +54,16 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("fight_up", false);
         }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            animator.SetBool("fight_down", true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            animator.SetBool("fight_down", false);
+        }
+
 
         if (moveHorizontal > 0 && !facingRight)
         {
@@ -79,7 +89,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("speed", Mathf.Abs(moveHorizontal));
         if (moveHorizontal > 0.1f || moveHorizontal < -0.1f)
         {
-            StartCoroutine(SoundCoroutine());
+            //StartCoroutine(SoundCoroutine());
             
             rb2D.AddForce(new Vector2(moveHorizontal * moveSpeed, 0f), ForceMode2D.Impulse );
             
