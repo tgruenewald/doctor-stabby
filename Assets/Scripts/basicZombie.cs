@@ -109,7 +109,7 @@ public class basicZombie : MonoBehaviour
             print("knockback: " + direction);
             mrig.AddForce(new Vector2(direction * knockBackForce, 0f), ForceMode2D.Impulse);
             knockBackMode = true;
-            GetComponent<AudioSource>().Play();
+            //GetComponent<AudioSource>().Play();
             StartCoroutine(TimerCoroutine());
             //SetSpeed();
             // Invoke("SetSpeed", 2f);
