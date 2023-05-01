@@ -54,6 +54,16 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("fight_up", false);
         }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            animator.SetBool("fight_down", true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            animator.SetBool("fight_down", false);
+        }
+
 
         if (moveHorizontal > 0 && !facingRight)
         {
