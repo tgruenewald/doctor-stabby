@@ -22,6 +22,7 @@ public class basicZombie : MonoBehaviour
     bool knockBackMode = false;
     public int health = 10;
     private bool facingRight = false;
+    Animator animator;
     [Header("Default Score")]
     public int score = 0;
     [Header("Text Object for Displaying Score")]
@@ -32,6 +33,7 @@ public class basicZombie : MonoBehaviour
     {
         mrig = GetComponent<Rigidbody2D>();
         mtrans = GetComponent<Transform>();
+        animator = GetComponent<Animator>();
         vel = new Vector2(speed, 0.0f);
         player = GameObject.FindGameObjectWithTag("Player");
         holdXb = mtrans.position.x - distance;
@@ -104,9 +106,23 @@ public class basicZombie : MonoBehaviour
         if(health <= 0)
         {
             AddScore(5);
-            GameObject.Destroy(gameObject);
+            ZombieDie();
+
         }
 
+    }
+
+    void ZombieDie()
+    {
+        animator.SetBool("die", true);
+        StartCoroutine(DieTimerCoroutine());
+    }
+
+    IEnumerator DieTimerCoroutine()
+    {
+
+        yield return new WaitForSeconds(1.2f);
+        GameObject.Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -115,6 +131,8 @@ public class basicZombie : MonoBehaviour
             print("ouch");
             Destroy(collision.gameObject);
             health -= 1;
+
+            ZombieHit();
 
         }
     }
@@ -129,21 +147,34 @@ public class basicZombie : MonoBehaviour
                 // playerController.health -= 1;
             }
             
-            float direction = 1f;
-            if (isRight)
-            {
-                direction = -1f;
-            }
-            print("knockback: " + direction);
-            mrig.AddForce(new Vector2(direction * knockBackForce, 0f), ForceMode2D.Impulse);
-            knockBackMode = true;
-            // TODO: add back in
-            //GetComponent<AudioSource>().Play();
-            StartCoroutine(TimerCoroutine());
+            KnockBack();
+
             //SetSpeed();
             // Invoke("SetSpeed", 2f);
 
         }
+    }
+
+    void ZombieHit()
+    {
+        animator.SetBool("hit", true);
+        KnockBack();
+    }
+
+    void KnockBack()
+    {
+        
+        float direction = 1f;
+        if (isRight)
+        {
+            direction = -1f;
+        }
+        print("knockback: " + direction);
+        mrig.AddForce(new Vector2(direction * knockBackForce, 0f), ForceMode2D.Impulse);
+        knockBackMode = true;
+        // TODO: add back in
+        //GetComponent<AudioSource>().Play();
+        StartCoroutine(TimerCoroutine());
     }
 
     IEnumerator TimerCoroutine()
@@ -151,6 +182,7 @@ public class basicZombie : MonoBehaviour
         
         yield return new WaitForSeconds(0.5f);
         knockBackMode = false;
+        animator.SetBool("hit", false);
     }
     void SetSpeed()
     {
