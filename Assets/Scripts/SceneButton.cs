@@ -10,12 +10,12 @@ public class SceneButton : MonoBehaviour
 
     public void playButton()
     {
-        Debug.Log("play");
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene("MainScene");
     }
     public void creditsButton(){
-        Debug.Log("credits");
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene("Credits");
     }
-
+    public void playAgain(){
+        SceneManager.LoadScene("title_scene");
+    }
 }

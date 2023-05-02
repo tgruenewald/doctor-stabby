@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,7 +12,8 @@ public class PlayerController : MonoBehaviour
     public float upOffset;
     public float downOffet;
 
-
+    [Header("Text Object for Displaying Health")]
+    public Text livesText;
     Rigidbody2D rb2D;
     float moveHorizontal;
     float moveVertical;
@@ -38,7 +41,7 @@ public class PlayerController : MonoBehaviour
         rb2D = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         isJumping = false;
-        
+        livesText.text =  health.ToString();
         
     }
 
@@ -95,7 +98,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+   
     void FixedUpdate()
     {
         if (fight_front)
@@ -183,13 +186,18 @@ public class PlayerController : MonoBehaviour
         print("i got hit");
         if (hit != true)
         {
-            health -= 1;
+            health -= 10;
+            livesText.text = health.ToString();
+            if(health < 1){
+                SceneManager.LoadScene("GameOver");
+            }
             hit = true;
             animator.SetBool("hit", true);
             StartCoroutine(TimerCoroutine());
         }
 
     }
+
     IEnumerator TimerCoroutine()
     {
         print("Starting timer");
