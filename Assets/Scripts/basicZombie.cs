@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
@@ -20,25 +21,29 @@ public class basicZombie : MonoBehaviour
     public float area;
     float knockBackForce = 30f;
     bool knockBackMode = false;
-    public int health = 10;
+    public int health = 3;
     private bool facingRight = false;
     Animator animator;
     [Header("Default Score")]
     public int score = 0;
     [Header("Text Object for Displaying Score")]
     public Text scoreText;
+    bool youDied = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        
+        health = 3;
         mrig = GetComponent<Rigidbody2D>();
         mtrans = GetComponent<Transform>();
         animator = GetComponent<Animator>();
         vel = new Vector2(speed, 0.0f);
         player = GameObject.FindGameObjectWithTag("Player");
+        scoreText = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
         holdXb = mtrans.position.x - distance;
         holdXf = mtrans.position.x + distance;
-        scoreText.text = score.ToString();
+
     }
 
 
@@ -103,8 +108,9 @@ public class basicZombie : MonoBehaviour
             }
 
         }
-        if(health <= 0)
+        if(health <= 0 && !youDied)
         {
+            youDied = true;
             AddScore(5);
             ZombieDie();
 
@@ -198,7 +204,8 @@ public class basicZombie : MonoBehaviour
     }
     public void AddScore(int points)
     {
-        score = score + points;
-        scoreText.text = score.ToString();
+        int myscore = Int32.Parse(scoreText.text);
+        scoreText.text = (myscore + 1).ToString();
+        PlayerPrefs.SetString("score", scoreText.text);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     bool fight_front = false;
     public int health = 10000;
     bool bang = false;
+    public GameObject gameOverButton;
 
     private enum FacingDirection
     {
@@ -149,7 +151,7 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         print("enter");
-        if (collision.gameObject.tag == "Platform")
+        if (collision.gameObject.tag == "Platform" || collision.gameObject.tag == "Zombie")
         {
             print("jumping false");
             isJumping = false;
@@ -160,7 +162,7 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         print("exit");
-        if (collision.gameObject.tag == "Platform")
+        if (collision.gameObject.tag == "Platform" || collision.gameObject.tag == "Zombie")
         {
             isJumping = true;
         }
@@ -186,9 +188,10 @@ public class PlayerController : MonoBehaviour
         print("i got hit");
         if (hit != true)
         {
-            health -= 10;
+            health -= 5;
             livesText.text = health.ToString();
-            if(health < 1){
+            if(health < 1)
+            {
                 SceneManager.LoadScene("GameOver");
             }
             hit = true;
@@ -196,6 +199,13 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(TimerCoroutine());
         }
 
+    }
+
+
+    IEnumerator GameOverTimerCoroutine()
+    {
+        yield return new WaitForSeconds(10f);
+        SceneManager.LoadScene("GameOver");
     }
 
     IEnumerator TimerCoroutine()
