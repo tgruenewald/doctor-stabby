@@ -121,15 +121,14 @@ public class basicZombie : MonoBehaviour
     {
         isDead = true;
         animator.SetBool("die", true);
-        print("dead zombie falls3");
-        mrig.AddForce(new Vector2(0f, 100f), ForceMode2D.Impulse);
+        mrig.AddForce(new Vector2(0f, 25f), ForceMode2D.Impulse);
         StartCoroutine(DieTimerCoroutine());
     }
 
     IEnumerator DieTimerCoroutine()
     {
 
-        yield return new WaitForSeconds(20f);
+        yield return new WaitForSeconds(10f);
         GameObject.Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)

@@ -1096,7 +1096,7 @@ MonoBehaviour:
   leftOffset: 5
   rightOffset: 5
   upOffset: 8
-  downOffet: 0
+  downOffet: 2
   livesText: {fileID: 0}
   moveSpeed: 3
   jumpForce: 20

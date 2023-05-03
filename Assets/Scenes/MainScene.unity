@@ -1169,6 +1169,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ZombieSpawner (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 420827234155082667, guid: d8c033eb9cf77c04ab2421d73653704d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1234465101536017919, guid: d8c033eb9cf77c04ab2421d73653704d, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1233,6 +1237,10 @@ PrefabInstance:
     - target: {fileID: 420827234155082667, guid: d8c033eb9cf77c04ab2421d73653704d, type: 3}
       propertyPath: m_Name
       value: ZombieSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 420827234155082667, guid: d8c033eb9cf77c04ab2421d73653704d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1234465101536017919, guid: d8c033eb9cf77c04ab2421d73653704d, type: 3}
       propertyPath: m_RootOrder

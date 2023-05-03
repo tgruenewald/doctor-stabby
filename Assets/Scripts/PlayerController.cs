@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     public int health = 10000;
     bool bang = false;
     public GameObject gameOverButton;
+    bool immune = false;
 
     public bool isZombieJumpCooldownOver { get; private set; }
 
@@ -86,6 +87,8 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
+            immune = true;
+            StartCoroutine(ImmuneTimerCoroutine());
             animator.SetBool("fight_down", true);
             FacingDirection facingDirection = FacingDirection.Down;
             Attack(facingDirection);
@@ -149,8 +152,13 @@ public class PlayerController : MonoBehaviour
             GameObject.Destroy(gameObject);
         }
     }
+    IEnumerator ImmuneTimerCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        immune = false;
+    }
 
-    IEnumerator ZombieJumpCooldownTimerCoroutine()
+        IEnumerator ZombieJumpCooldownTimerCoroutine()
     {
         yield return new WaitForSeconds(0.5f);
         isZombieJumpCooldownOver = true;
@@ -190,7 +198,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.gameObject.tag == "Zombie")
         {
-            if (!collision.gameObject.GetComponent<basicZombie>().isDead)
+            if (!collision.gameObject.GetComponent<basicZombie>().isDead && !immune)
             {
                 print("hit by zombie");
                 beingHit();
@@ -205,7 +213,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Zombie")
         {
-            if (!collision.gameObject.GetComponent<basicZombie>().isDead)
+            if (!collision.gameObject.GetComponent<basicZombie>().isDead && !immune)
             {
                 print("hit by zombie");
                 // Only "living" zombies can hurt you
@@ -257,7 +265,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PainCoroutine(FacingDirection cd)
     {
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0f);  // 0.7
 
         //if space is pushed
         //spawn pain box in current direction
