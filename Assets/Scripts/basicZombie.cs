@@ -19,7 +19,7 @@ public class basicZombie : MonoBehaviour
     Vector2 vel;
     public bool tracking = false;
     public float area;
-    float knockBackForce = 30f;
+    float knockBackForce = 20f;
     bool knockBackMode = false;
     public int health = 3;
     private bool facingRight = false;
@@ -30,11 +30,12 @@ public class basicZombie : MonoBehaviour
     public Text scoreText;
     bool youDied = false;
 
+    public bool isDead { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
-        
-        health = 3;
+        isDead = false;   
         mrig = GetComponent<Rigidbody2D>();
         mtrans = GetComponent<Transform>();
         animator = GetComponent<Animator>();
@@ -49,7 +50,7 @@ public class basicZombie : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!knockBackMode) 
+        if (!knockBackMode && !isDead) 
         {
             if (player != null)
             {
@@ -63,7 +64,6 @@ public class basicZombie : MonoBehaviour
             if (isRight && mtrans.position.x < holdXf)
             {
                 mrig.MovePosition(mrig.position + (1.0f * vel * Time.deltaTime));
-                Debug.Log("right");
             }
             if (mtrans.position.x <= holdXb && !tracking)
             {
@@ -76,7 +76,6 @@ public class basicZombie : MonoBehaviour
             if (!isRight && mtrans.position.x > holdXb)
             {
                 mrig.MovePosition(mrig.position - (1.0f * vel * Time.deltaTime));
-                Debug.Log("left");
             }
             if (distToPlayer <= area)
             {
@@ -120,49 +119,36 @@ public class basicZombie : MonoBehaviour
 
     void ZombieDie()
     {
+        isDead = true;
         animator.SetBool("die", true);
+        mrig.AddForce(new Vector2(0f, 25f), ForceMode2D.Impulse);
         StartCoroutine(DieTimerCoroutine());
     }
 
     IEnumerator DieTimerCoroutine()
     {
 
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(10f);
         GameObject.Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("PainBox"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            print("ouch");
-            Destroy(collision.gameObject);
-            health -= 1;
-
-            ZombieHit();
-
+            KnockBack();
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("hit");
-            PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
-            if(playerController != null)
-            {
-                // playerController.health -= 1;
-            }
-            
             KnockBack();
-
-            //SetSpeed();
-            // Invoke("SetSpeed", 2f);
-
         }
     }
 
-    void ZombieHit()
+    public void ZombieHit()
     {
+        health -= 1;
         animator.SetBool("hit", true);
         KnockBack();
     }
@@ -175,7 +161,6 @@ public class basicZombie : MonoBehaviour
         {
             direction = -1f;
         }
-        print("knockback: " + direction);
         mrig.AddForce(new Vector2(direction * knockBackForce, 0f), ForceMode2D.Impulse);
         knockBackMode = true;
         // TODO: add back in
@@ -196,7 +181,6 @@ public class basicZombie : MonoBehaviour
     }
     void Flip()
     {
-        print("flip");
         facingRight = !facingRight;
         Vector2 currentScale = transform.localScale;
         currentScale.x *= -1;

@@ -30,6 +30,6 @@ public class Spawner : MonoBehaviour
     }
     void Summon()
     {
-        Instantiate(target, transform);
+        Instantiate(target, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0), gameObject.transform.rotation);
     }
 }
