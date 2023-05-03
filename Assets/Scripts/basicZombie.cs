@@ -30,11 +30,12 @@ public class basicZombie : MonoBehaviour
     public Text scoreText;
     bool youDied = false;
 
+    public bool isDead { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
-        
-        health = 3;
+        isDead = false;   
         mrig = GetComponent<Rigidbody2D>();
         mtrans = GetComponent<Transform>();
         animator = GetComponent<Animator>();
@@ -49,7 +50,7 @@ public class basicZombie : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!knockBackMode) 
+        if (!knockBackMode && !isDead) 
         {
             if (player != null)
             {
@@ -118,14 +119,17 @@ public class basicZombie : MonoBehaviour
 
     void ZombieDie()
     {
+        isDead = true;
         animator.SetBool("die", true);
+        print("dead zombie falls3");
+        mrig.AddForce(new Vector2(0f, 100f), ForceMode2D.Impulse);
         StartCoroutine(DieTimerCoroutine());
     }
 
     IEnumerator DieTimerCoroutine()
     {
 
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(20f);
         GameObject.Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)

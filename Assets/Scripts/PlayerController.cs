@@ -190,14 +190,29 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.gameObject.tag == "Zombie")
         {
-            beingHit();
+            if (!collision.gameObject.GetComponent<basicZombie>().isDead)
+            {
+                print("hit by zombie");
+                beingHit();
+            }
+            else
+            {
+                print("dead cant hurt");
+            }
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Zombie")
         {
-            beingHit();
+            if (!collision.gameObject.GetComponent<basicZombie>().isDead)
+            {
+                print("hit by zombie");
+                // Only "living" zombies can hurt you
+                beingHit();
+            }
+
+
         }
     }
 

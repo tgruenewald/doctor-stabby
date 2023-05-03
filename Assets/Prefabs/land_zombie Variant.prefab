@@ -809,7 +809,7 @@ MonoBehaviour:
   holdXf: 0
   tracking: 0
   area: 100
-  health: 10
+  health: 1
   score: 0
   scoreText: {fileID: 0}
 --- !u!70 &4613821762515719169
