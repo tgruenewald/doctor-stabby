@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     float moveVertical;
     public float moveSpeed = 3f;
     public float jumpForce = 10f;
-    bool isJumping;
+    public bool isJumping;
     bool facingRight = true;
     Animator animator;
     bool hit = false;
@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     public int health = 10000;
     bool bang = false;
     public GameObject gameOverButton;
+
+    public bool isZombieJumpCooldownOver { get; private set; }
 
     private enum FacingDirection
     {
@@ -40,6 +42,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isZombieJumpCooldownOver = true;
+        PlayerPrefs.SetString("score", "0");
         rb2D = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         isJumping = false;
@@ -50,18 +54,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameObject.transform.position.y < -100f)
+        {
+            // fell out of the scene
+            SceneManager.LoadScene("GameOver");
+        }
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveVertical = Input.GetAxisRaw("Jump");
         
         if (Input.GetMouseButtonDown(0))
         {
-            print("fight!");
             fight_front = true;
         }
 
         if (Input.GetMouseButtonUp(0))  
         {
-            print("weapon back");
             fight_front= false; 
 
         }
@@ -109,12 +116,10 @@ public class PlayerController : MonoBehaviour
             FacingDirection facingDirection;
             if (transform.localScale.x > 0)
             {
-                print("attacking right");
                 facingDirection = FacingDirection.Right;
             } 
             else
             {
-                print("attacking left");
                 facingDirection= FacingDirection.Left;
 
             }
@@ -135,12 +140,20 @@ public class PlayerController : MonoBehaviour
 
         if (!isJumping && moveVertical > 0.1f)
         {
-            rb2D.AddForce(new Vector2(0f, moveVertical * jumpForce), ForceMode2D.Impulse);
+            isJumping = true;
+            print("jumping now");
+            rb2D.AddForce(new Vector2(0f, Mathf.Clamp(moveVertical * jumpForce, 0.1f, 80f)), ForceMode2D.Impulse);
         }
         if(health <= 0)
         {
             GameObject.Destroy(gameObject);
         }
+    }
+
+    IEnumerator ZombieJumpCooldownTimerCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+        isZombieJumpCooldownOver = true;
     }
     IEnumerator SoundCoroutine()
     {
@@ -150,10 +163,14 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        print("enter");
-        if (collision.gameObject.tag == "Platform" || collision.gameObject.tag == "Zombie")
+        if (isZombieJumpCooldownOver && collision.gameObject.tag == "Zombie")
         {
-            print("jumping false");
+            isJumping = false;
+            isZombieJumpCooldownOver = false;
+            StartCoroutine(ZombieJumpCooldownTimerCoroutine());
+        }
+        if (collision.gameObject.tag == "Platform")
+        {
             isJumping = false;
         }
         
@@ -161,10 +178,19 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        print("exit");
-        if (collision.gameObject.tag == "Platform" || collision.gameObject.tag == "Zombie")
+        if (isZombieJumpCooldownOver && collision.gameObject.tag == "Zombie")
         {
             isJumping = true;
+            isZombieJumpCooldownOver = false;
+            StartCoroutine(ZombieJumpCooldownTimerCoroutine());
+        }
+        if (collision.gameObject.tag == "Platform")
+        {
+            isJumping = true;
+        }
+        if (collision.gameObject.tag == "Zombie")
+        {
+            beingHit();
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
@@ -185,7 +211,6 @@ public class PlayerController : MonoBehaviour
 
     void beingHit()
     {
-        print("i got hit");
         if (hit != true)
         {
             health -= 5;
@@ -210,15 +235,36 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator TimerCoroutine()
     {
-        print("Starting timer");
         yield return new WaitForSeconds(0.5f); 
         animator.SetBool("hit", false);
         hit = false;
     }
 
-    IEnumerator PainCoroutine()
+    IEnumerator PainCoroutine(FacingDirection cd)
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.7f);
+
+        //if space is pushed
+        //spawn pain box in current direction
+        float playerX = transform.position.x;
+        float playerY = transform.position.y;
+        print("causing pain");
+        switch (cd)
+        {
+            case FacingDirection.Up:
+                Quaternion quat = new Quaternion(0, 0, 0, 0);
+                Instantiate(painBox, new Vector3(playerX, transform.position.y + upOffset, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
+                break;
+            case FacingDirection.Down:
+                Instantiate(painBox, new Vector3(playerX, transform.position.y - downOffet, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
+                break;
+            case FacingDirection.Left:
+                Instantiate(painBox, new Vector3(transform.position.x - leftOffset, playerY + 5f, 0), Quaternion.identity);
+                break;
+            case FacingDirection.Right:
+                Instantiate(painBox, new Vector3(transform.position.x + rightOffset, transform.position.y + 5f, 0), Quaternion.identity);
+                break;
+        }
         bang = false;
     }
 
@@ -230,32 +276,8 @@ public class PlayerController : MonoBehaviour
         if (!bang)
         {
             bang = true;
-            StartCoroutine(PainCoroutine());    
-            //if space is pushed
-            //spawn pain box in current direction
-            float playerX = transform.position.x;
-            float playerY = transform.position.y;
-            switch (cd)
-            {
-                case FacingDirection.Up:
-                    Debug.Log("got into up, player box should go to " + playerX + " " + transform.position.y + upOffset);
-                    Quaternion quat = new Quaternion(0, 0, 0, 0);
-                    Instantiate(painBox, new Vector3(playerX, transform.position.y + upOffset, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
-                    break;
-                case FacingDirection.Down:
-                    Debug.Log("got into down, player box should go to " + playerX + " " + transform.position.y + downOffet);
-                    Instantiate(painBox, new Vector3(playerX, transform.position.y - downOffet, 0), Quaternion.Euler(new Vector3(0, 0, 90)));
-                    break;
-                case FacingDirection.Left:
-                    Debug.Log("got into left, player box should go to " + transform.position.x + leftOffset + " " + playerY);
-                    Instantiate(painBox, new Vector3(transform.position.x - leftOffset, playerY + 5f, 0), Quaternion.identity);
-                    break;
-                case FacingDirection.Right:
-                    print("Up offset is " + upOffset);
-                    Instantiate(painBox, new Vector3(transform.position.x + rightOffset, transform.position.y + 5f, 0), Quaternion.identity);
+            StartCoroutine(PainCoroutine(cd));    
 
-                    break;
-            }
         }
     }
 

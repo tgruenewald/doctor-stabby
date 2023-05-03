@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: ZombieSpawner
   m_TagString: Untagged
-  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5912069472351608526
 MonoBehaviour:
@@ -46,5 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: 5
   initTimer: 5
-  target: {fileID: 0}
-  difficulty: 1
+  target: {fileID: 4133078134226329651, guid: d8d83e18e6df33545af022598fff9938, type: 3}
+  difficulty: 0
