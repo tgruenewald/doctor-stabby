@@ -1101,7 +1101,7 @@ MonoBehaviour:
   moveSpeed: 3
   jumpForce: 20
   isJumping: 0
-  health: 500
+  health: 100
   gameOverButton: {fileID: 0}
 --- !u!114 &8047840986442546943
 MonoBehaviour:

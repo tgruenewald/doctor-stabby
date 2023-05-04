@@ -128,7 +128,7 @@ public class basicZombie : MonoBehaviour
     IEnumerator DieTimerCoroutine()
     {
 
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(0.8f);
         GameObject.Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)
