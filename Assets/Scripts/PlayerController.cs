@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using LootLocker.Requests;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
     bool bang = false;
     public GameObject gameOverButton;
     bool immune = false;
+    string leaderboardKey = "drstabby-leaderboard-key";
 
     public bool isZombieJumpCooldownOver { get; private set; }
 
@@ -43,6 +45,32 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject scoreToBeatObj = GameObject.Find("scoreToBeat");
+        Text scoreToBeat = scoreToBeatObj.GetComponent<Text>();
+        LootLockerSDKManager.StartGuestSession((response) =>
+        {
+            if (!response.success)
+            {
+                Debug.Log("error starting LootLocker session");
+
+                return;
+            }
+
+            Debug.Log("successfully started LootLocker session");
+            Debug.Log("Getting scores");
+            LootLockerSDKManager.GetScoreList(leaderboardKey, 1, 0, (response) =>
+            {
+                if (response.success)
+                {
+                    LootLockerLeaderboardMember[] scores = response.items;
+                    if (scores.Length > 0)
+                    {
+                        scoreToBeat.text = "Score To Beat: " + scores[0].score;
+                    }
+                }
+            });
+        });
+
         isZombieJumpCooldownOver = true;
         PlayerPrefs.SetString("score", "0");
         rb2D = gameObject.GetComponent<Rigidbody2D>();

@@ -10,7 +10,7 @@ public class GameOver : MonoBehaviour
     {
         Text gameover = GameObject.FindGameObjectWithTag("GameOverButton").GetComponent<Text>();
 
-        gameover.text = "Score: " + PlayerPrefs.GetString("score");
+        gameover.text = PlayerPrefs.GetString("score");
     }
 
     // Update is called once per frame
